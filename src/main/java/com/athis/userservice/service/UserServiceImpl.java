@@ -2,6 +2,7 @@ package com.athis.userservice.service;
 
 import com.athis.common.dto.request.PageRequestApi;
 import com.athis.common.dto.response.PageResponseApi;
+import com.athis.common.enums.CommonStatus;
 import com.athis.userservice.dto.request.UserRequest;
 import com.athis.userservice.dto.response.UserResponse;
 import com.athis.userservice.entity.User;
@@ -109,7 +110,7 @@ public class UserServiceImpl implements UserService {
                 .dateOfBirth(request.getDateOfBirth())
                 .gender(request.getGender())
                 .address(request.getAddress())
-                .status(request.getStatus())
+                .status(CommonStatus.valueOf(request.getStatus()))
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -140,7 +141,7 @@ public class UserServiceImpl implements UserService {
         user.setAddress(request.getAddress());
 
         if (request.getStatus() != null) {
-            user.setStatus(request.getStatus());
+            user.setStatus(CommonStatus.valueOf(request.getStatus()));
         }
 
         User updatedUser = userRepository.save(user);
@@ -170,7 +171,7 @@ public class UserServiceImpl implements UserService {
                         new UserNotFoundException(id)
                 );
 
-        user.setStatus(status);
+        user.setStatus(CommonStatus.valueOf(status));
 
         userRepository.save(user);
 
@@ -192,7 +193,7 @@ public class UserServiceImpl implements UserService {
                 .dateOfBirth(user.getDateOfBirth())
                 .gender(user.getGender())
                 .address(user.getAddress())
-                .status(user.getStatus())
+                .status(user.getStatus().getValue())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();
