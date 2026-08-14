@@ -5,63 +5,68 @@ import com.athis.common.dto.response.PageResponseApi;
 import com.athis.common.dto.response.ResponseApi;
 import com.athis.userservice.dto.request.UserRequest;
 import com.athis.userservice.dto.response.UserResponse;
-import com.athis.userservice.service.UserService;
-import lombok.RequiredArgsConstructor;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Tag(name = "Users", description = "User management APIs")
 @RequestMapping("/users")
-@RequiredArgsConstructor
-public class UserController {
+public interface UserController {
 
-    private final UserService userService;
-
+    @Operation(summary = "Get user by ID")
     @GetMapping("/{id}")
-    public ResponseApi<UserResponse> getById(@PathVariable Long id) {
-        return ResponseApi.success(userService.getById(id));
-    }
+    ResponseApi<UserResponse> getById(
+            @Parameter(description = "User ID", example = "1") @PathVariable Long id
+    );
 
+    @Operation(summary = "Get user by account ID")
     @GetMapping("/account/{accountId}")
-    public ResponseApi<UserResponse> getByAccountId(@PathVariable Long accountId) {
-        return ResponseApi.success(userService.getByAccountId(accountId));
-    }
+    ResponseApi<UserResponse> getByAccountId(
+            @Parameter(description = "Account ID", example = "1") @PathVariable Long accountId
+    );
 
+    @Operation(summary = "Get current user")
     @GetMapping("/current/{accountId}")
-    public ResponseApi<UserResponse> getCurrentUser(@PathVariable Long accountId) {
-        return ResponseApi.success(userService.getCurrentUser(accountId));
-    }
+    ResponseApi<UserResponse> getCurrentUser(
+            @Parameter(description = "Account ID", example = "1") @PathVariable Long accountId
+    );
 
+    @Operation(summary = "Get all users")
     @GetMapping
-    public ResponseApi<List<UserResponse>> getAll() {
-        return ResponseApi.success(userService.getAll());
-    }
+    ResponseApi<List<UserResponse>> getAll();
 
+    @Operation(summary = "Get users with pagination")
     @GetMapping("/page")
-    public ResponseApi<PageResponseApi<UserResponse>> getAll(@ModelAttribute PageRequestApi request) {
-        return ResponseApi.success(userService.getAll(request));
-    }
+    ResponseApi<PageResponseApi<UserResponse>> getAll(
+            @ModelAttribute PageRequestApi request
+    );
 
+    @Operation(summary = "Create user")
     @PostMapping
-    public ResponseApi<UserResponse> create(@RequestBody UserRequest request) {
-        return ResponseApi.success(userService.create(request));
-    }
+    ResponseApi<UserResponse> create(
+            @RequestBody UserRequest request
+    );
 
+    @Operation(summary = "Update user")
     @PutMapping("/{id}")
-    public ResponseApi<UserResponse> update(@PathVariable Long id, @RequestBody UserRequest request) {
-        return ResponseApi.success(userService.update(id, request));
-    }
+    ResponseApi<UserResponse> update(
+            @Parameter(description = "User ID", example = "1") @PathVariable Long id,
+            @RequestBody UserRequest request
+    );
 
+    @Operation(summary = "Delete user")
     @DeleteMapping("/{id}")
-    public ResponseApi<Void> delete(@PathVariable Long id) {
-        userService.delete(id);
-        return ResponseApi.success();
-    }
+    ResponseApi<Void> delete(
+            @Parameter(description = "User ID", example = "1") @PathVariable Long id
+    );
 
+    @Operation(summary = "Update user status")
     @PatchMapping("/{id}/status")
-    public ResponseApi<Void> updateStatus(@PathVariable Long id, @RequestParam String status) {
-        userService.updateStatus(id, status);
-        return ResponseApi.success();
-    }
+    ResponseApi<Void> updateStatus(
+            @Parameter(description = "User ID", example = "1") @PathVariable Long id,
+            @Parameter(description = "User status", example = "ACTIVE") @RequestParam String status
+    );
 }
