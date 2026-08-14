@@ -1,6 +1,7 @@
 package com.athis.userservice.entity;
 
 import com.athis.common.enums.CommonStatus;
+import com.athis.userservice.enums.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,8 +39,9 @@ public class User {
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "gender", length = 20)
-    private String gender;
+    private Gender gender;
 
     @Column(name = "address", length = 255)
     private String address;

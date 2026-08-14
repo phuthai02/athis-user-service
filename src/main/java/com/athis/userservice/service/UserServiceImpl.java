@@ -6,6 +6,7 @@ import com.athis.common.enums.CommonStatus;
 import com.athis.userservice.dto.request.UserRequest;
 import com.athis.userservice.dto.response.UserResponse;
 import com.athis.userservice.entity.User;
+import com.athis.userservice.enums.Gender;
 import com.athis.userservice.exception.UserNotFoundException;
 import com.athis.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -108,7 +109,7 @@ public class UserServiceImpl implements UserService {
                 .phone(request.getPhone())
                 .avatar(request.getAvatar())
                 .dateOfBirth(request.getDateOfBirth())
-                .gender(request.getGender())
+                .gender(Gender.valueOf(request.getGender()))
                 .address(request.getAddress())
                 .status(CommonStatus.valueOf(request.getStatus()))
                 .build();
@@ -137,7 +138,7 @@ public class UserServiceImpl implements UserService {
         user.setPhone(request.getPhone());
         user.setAvatar(request.getAvatar());
         user.setDateOfBirth(request.getDateOfBirth());
-        user.setGender(request.getGender());
+        user.setGender(Gender.valueOf(request.getGender()));
         user.setAddress(request.getAddress());
 
         if (request.getStatus() != null) {
@@ -191,7 +192,7 @@ public class UserServiceImpl implements UserService {
                 .phone(user.getPhone())
                 .avatar(user.getAvatar())
                 .dateOfBirth(user.getDateOfBirth())
-                .gender(user.getGender())
+                .gender(user.getGender().getValue())
                 .address(user.getAddress())
                 .status(user.getStatus().getValue())
                 .createdAt(user.getCreatedAt())
