@@ -159,7 +159,7 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException(id);
         }
 
-        userRepository.deleteById(id);
+        updateStatus(id, CommonStatus.DELETED.getValue());
 
         log.info("Deleted user: id={}", id);
     }
