@@ -3,6 +3,7 @@ package com.athis.userservice.controller;
 import com.athis.common.dto.request.PageRequestApi;
 import com.athis.common.dto.response.PageResponseApi;
 import com.athis.common.dto.response.ResponseApi;
+import com.athis.common.enums.CommonStatus;
 import com.athis.userservice.dto.request.UserRequest;
 import com.athis.userservice.dto.response.UserResponse;
 import com.athis.userservice.service.UserService;
@@ -59,7 +60,7 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ResponseApi<Void> updateStatus(Long id, String status) {
+    public ResponseApi<Void> updateStatus(Long id, CommonStatus status) {
         userService.updateStatus(id, status);
         return ResponseApi.success();
     }

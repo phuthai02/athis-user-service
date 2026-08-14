@@ -8,7 +8,6 @@ import com.athis.common.exception.ResourceNotFoundException;
 import com.athis.userservice.dto.request.UserRequest;
 import com.athis.userservice.dto.response.UserResponse;
 import com.athis.userservice.entity.User;
-import com.athis.userservice.enums.Gender;
 import com.athis.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -112,9 +111,9 @@ public class UserServiceImpl implements UserService {
                 .phone(request.getPhone())
                 .avatar(request.getAvatar())
                 .dateOfBirth(request.getDateOfBirth())
-                .gender(Gender.valueOf(request.getGender()))
+                .gender(request.getGender())
                 .address(request.getAddress())
-                .status(CommonStatus.valueOf(request.getStatus()))
+                .status(request.getStatus())
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -143,11 +142,11 @@ public class UserServiceImpl implements UserService {
         user.setPhone(request.getPhone());
         user.setAvatar(request.getAvatar());
         user.setDateOfBirth(request.getDateOfBirth());
-        user.setGender(Gender.valueOf(request.getGender()));
+        user.setGender(request.getGender());
         user.setAddress(request.getAddress());
 
         if (request.getStatus() != null) {
-            user.setStatus(CommonStatus.valueOf(request.getStatus()));
+            user.setStatus(request.getStatus());
         }
 
         User updatedUser = userRepository.save(user);
@@ -175,7 +174,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateStatus(Long id, String status) {
+    public void updateStatus(Long id, CommonStatus status) {
 
         User user = userRepository.findById(id)
                 .orElseThrow(() ->
@@ -184,7 +183,7 @@ public class UserServiceImpl implements UserService {
                         )
                 );
 
-        user.setStatus(CommonStatus.valueOf(status));
+        user.setStatus(status);
 
         userRepository.save(user);
 
@@ -204,9 +203,9 @@ public class UserServiceImpl implements UserService {
                 .phone(user.getPhone())
                 .avatar(user.getAvatar())
                 .dateOfBirth(user.getDateOfBirth())
-                .gender(user.getGender().getValue())
+                .gender(user.getGender())
                 .address(user.getAddress())
-                .status(user.getStatus().getValue())
+                .status(user.getStatus())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();

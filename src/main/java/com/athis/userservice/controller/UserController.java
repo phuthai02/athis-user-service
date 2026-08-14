@@ -3,6 +3,7 @@ package com.athis.userservice.controller;
 import com.athis.common.dto.request.PageRequestApi;
 import com.athis.common.dto.response.PageResponseApi;
 import com.athis.common.dto.response.ResponseApi;
+import com.athis.common.enums.CommonStatus;
 import com.athis.userservice.dto.request.UserRequest;
 import com.athis.userservice.dto.response.UserResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -66,6 +67,6 @@ public interface UserController {
     @PatchMapping("/{id}/status")
     ResponseApi<Void> updateStatus(
             @PathVariable Long id,
-            @RequestParam String status
+            @RequestParam CommonStatus status
     );
 }

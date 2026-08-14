@@ -2,6 +2,7 @@ package com.athis.userservice.service;
 
 import com.athis.common.dto.request.PageRequestApi;
 import com.athis.common.dto.response.PageResponseApi;
+import com.athis.common.enums.CommonStatus;
 import com.athis.userservice.dto.request.UserRequest;
 import com.athis.userservice.dto.response.UserResponse;
 
@@ -16,5 +17,5 @@ public interface UserService {
     UserResponse create(UserRequest request);
     UserResponse update(Long id, UserRequest request);
     void delete(Long id);
-    void updateStatus(Long id, String status);
+    void updateStatus(Long id, CommonStatus status);
 }

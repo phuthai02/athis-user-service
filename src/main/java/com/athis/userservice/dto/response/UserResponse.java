@@ -1,5 +1,7 @@
 package com.athis.userservice.dto.response;
 
+import com.athis.common.enums.CommonStatus;
+import com.athis.userservice.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,9 +22,9 @@ public class UserResponse {
     private String phone;
     private String avatar;
     private LocalDate dateOfBirth;
-    private String gender;
+    private Gender gender;
     private String address;
-    private String status;
+    private CommonStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
