@@ -3,6 +3,7 @@ package com.athis.userservice.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -24,6 +25,9 @@ public class User {
     @Column(name = "full_name", length = 100)
     private String fullName;
 
+    @Column(name = "email", length = 150)
+    private String email;
+
     @Column(name = "phone", length = 20)
     private String phone;
 
@@ -31,7 +35,7 @@ public class User {
     private String avatar;
 
     @Column(name = "date_of_birth")
-    private LocalDateTime dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @Column(name = "gender", length = 20)
     private String gender;

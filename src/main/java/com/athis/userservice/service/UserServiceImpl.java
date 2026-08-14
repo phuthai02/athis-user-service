@@ -103,6 +103,7 @@ public class UserServiceImpl implements UserService {
         User user = User.builder()
                 .accountId(request.getAccountId())
                 .fullName(request.getFullName())
+                .email(request.getEmail())
                 .phone(request.getPhone())
                 .avatar(request.getAvatar())
                 .dateOfBirth(request.getDateOfBirth())
@@ -131,6 +132,7 @@ public class UserServiceImpl implements UserService {
                 );
 
         user.setFullName(request.getFullName());
+        user.setEmail(request.getEmail());
         user.setPhone(request.getPhone());
         user.setAvatar(request.getAvatar());
         user.setDateOfBirth(request.getDateOfBirth());
@@ -184,6 +186,7 @@ public class UserServiceImpl implements UserService {
                 .id(user.getId())
                 .accountId(user.getAccountId())
                 .fullName(user.getFullName())
+                .email(user.getEmail())
                 .phone(user.getPhone())
                 .avatar(user.getAvatar())
                 .dateOfBirth(user.getDateOfBirth())

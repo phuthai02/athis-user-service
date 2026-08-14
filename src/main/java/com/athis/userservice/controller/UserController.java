@@ -6,7 +6,6 @@ import com.athis.common.dto.response.ResponseApi;
 import com.athis.userservice.dto.request.UserRequest;
 import com.athis.userservice.dto.response.UserResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,19 +18,19 @@ public interface UserController {
     @Operation(summary = "Get user by ID")
     @GetMapping("/{id}")
     ResponseApi<UserResponse> getById(
-            @Parameter(description = "User ID", example = "1") @PathVariable Long id
+            @PathVariable Long id
     );
 
     @Operation(summary = "Get user by account ID")
     @GetMapping("/account/{accountId}")
     ResponseApi<UserResponse> getByAccountId(
-            @Parameter(description = "Account ID", example = "1") @PathVariable Long accountId
+            @PathVariable Long accountId
     );
 
     @Operation(summary = "Get current user")
     @GetMapping("/current/{accountId}")
     ResponseApi<UserResponse> getCurrentUser(
-            @Parameter(description = "Account ID", example = "1") @PathVariable Long accountId
+            @PathVariable Long accountId
     );
 
     @Operation(summary = "Get all users")
@@ -53,20 +52,20 @@ public interface UserController {
     @Operation(summary = "Update user")
     @PutMapping("/{id}")
     ResponseApi<UserResponse> update(
-            @Parameter(description = "User ID", example = "1") @PathVariable Long id,
+            @PathVariable Long id,
             @RequestBody UserRequest request
     );
 
     @Operation(summary = "Delete user")
     @DeleteMapping("/{id}")
     ResponseApi<Void> delete(
-            @Parameter(description = "User ID", example = "1") @PathVariable Long id
+            @PathVariable Long id
     );
 
     @Operation(summary = "Update user status")
     @PatchMapping("/{id}/status")
     ResponseApi<Void> updateStatus(
-            @Parameter(description = "User ID", example = "1") @PathVariable Long id,
-            @Parameter(description = "User status", example = "ACTIVE") @RequestParam String status
+            @PathVariable Long id,
+            @RequestParam String status
     );
 }

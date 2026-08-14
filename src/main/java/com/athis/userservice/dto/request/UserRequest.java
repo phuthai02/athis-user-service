@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -14,9 +14,10 @@ import java.time.LocalDateTime;
 public class UserRequest {
     private Long accountId;
     private String fullName;
+    private String email;
     private String phone;
     private String avatar;
-    private LocalDateTime dateOfBirth;
+    private LocalDate dateOfBirth;
     private String gender;
     private String address;
     private String status;
