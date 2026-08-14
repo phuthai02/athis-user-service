@@ -1,5 +1,6 @@
 package com.athis.userservice.entity;
 
+import com.athis.common.enums.CommonStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -43,8 +44,9 @@ public class User {
     @Column(name = "address", length = 255)
     private String address;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
-    private String status;
+    private CommonStatus status;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -54,12 +56,10 @@ public class User {
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-
-        if (status == null) {
-            status = "ACTIVE";
-        }
+        LocalDateTime now = LocalDateTime.now();
+        createdAt = now;
+        updatedAt = now;
+        if (status == null) status = CommonStatus.INACTIVE;
     }
 
     @PreUpdate

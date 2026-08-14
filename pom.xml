@@ -12,7 +12,7 @@
 
     <groupId>com.athis</groupId>
     <artifactId>athis-user-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>athis-user-service</name>
     <description>athis-user-service</description>
 
