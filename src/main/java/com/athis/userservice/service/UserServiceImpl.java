@@ -3,11 +3,12 @@ package com.athis.userservice.service;
 import com.athis.common.dto.request.PageRequestApi;
 import com.athis.common.dto.response.PageResponseApi;
 import com.athis.common.enums.CommonStatus;
+import com.athis.common.exception.ResourceAlreadyExistsException;
+import com.athis.common.exception.ResourceNotFoundException;
 import com.athis.userservice.dto.request.UserRequest;
 import com.athis.userservice.dto.response.UserResponse;
 import com.athis.userservice.entity.User;
 import com.athis.userservice.enums.Gender;
-import com.athis.userservice.exception.UserNotFoundException;
 import com.athis.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findById(id)
                 .orElseThrow(() ->
-                        new UserNotFoundException(id)
+                        new ResourceNotFoundException("User not found with id: " + id)
                 );
 
         return toResponse(user);
@@ -45,7 +46,9 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findByAccountId(accountId)
                 .orElseThrow(() ->
-                        new UserNotFoundException("User not found with accountId: " + accountId)
+                        new ResourceNotFoundException(
+                                "User not found with accountId: " + accountId
+                        )
                 );
 
         return toResponse(user);
@@ -96,7 +99,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse create(UserRequest request) {
 
         if (userRepository.existsByAccountId(request.getAccountId())) {
-            throw new RuntimeException(
+            throw new ResourceAlreadyExistsException(
                     "User already exists with accountId: "
                             + request.getAccountId()
             );
@@ -130,7 +133,9 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findById(id)
                 .orElseThrow(() ->
-                        new UserNotFoundException(id)
+                        new ResourceNotFoundException(
+                                "User not found with id: " + id
+                        )
                 );
 
         user.setFullName(request.getFullName());
@@ -155,11 +160,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Long id) {
 
-        if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException(id);
-        }
+        User user = userRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User not found with id: " + id
+                        )
+                );
 
-        updateStatus(id, CommonStatus.DELETED.getValue());
+        user.setStatus(CommonStatus.DELETED);
+
+        userRepository.save(user);
 
         log.info("Deleted user: id={}", id);
     }
@@ -169,7 +179,9 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findById(id)
                 .orElseThrow(() ->
-                        new UserNotFoundException(id)
+                        new ResourceNotFoundException(
+                                "User not found with id: " + id
+                        )
                 );
 
         user.setStatus(CommonStatus.valueOf(status));
