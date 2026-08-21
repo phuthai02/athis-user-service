@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <meta name="description" content="Giao diện quản trị tạm thời cho hệ thống Athis">
+    <title>Athis Control</title>
+    <link rel="stylesheet" href="/app.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+<div id="login-view" class="login-view">
+    <section class="brand-panel">
+        <div class="brand-mark">A</div>
+        <p class="eyebrow">ATHIS SYSTEM</p>
+        <h1>Một nơi để vận hành<br>toàn bộ hệ thống.</h1>
+        <p class="brand-copy">Đăng nhập, quản lý tài khoản, vai trò, quyền hạn và hồ sơ người dùng trong một giao diện gọn gàng.</p>
+        <div class="service-status">
+            <span id="auth-dot" class="status-dot"></span>
+            <span id="service-message">Đang kiểm tra các dịch vụ…</span>
+        </div>
+    </section>
+
+    <main class="login-panel">
+        <div class="login-card">
+            <div class="mobile-brand"><span>A</span> Athis Control</div>
+            <p class="eyebrow">CHÀO MỪNG TRỞ LẠI</p>
+            <h2>Đăng nhập quản trị</h2>
+            <p class="muted">Sử dụng tài khoản nội bộ hoặc Google.</p>
+
+            <form id="office-login-form" class="stack-form">
+                <label>
+                    <span>Tên đăng nhập</span>
+                    <input id="login-username" name="username" autocomplete="username" placeholder="admin" required>
+                </label>
+                <label>
+                    <span>Mật khẩu</span>
+                    <div class="password-field">
+                        <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Nhập mật khẩu" required>
+                        <button id="toggle-password" type="button" class="text-button" aria-label="Hiện hoặc ẩn mật khẩu">Hiện</button>
+                    </div>
+                </label>
+                <button id="office-login-button" type="submit" class="button primary wide">Đăng nhập OFFICE</button>
+            </form>
+
+            <div class="divider"><span>hoặc</span></div>
+            <div id="google-login-button" class="google-slot"></div>
+            <p id="login-error" class="form-error" role="alert"></p>
+            <p class="login-note">Phiên đăng nhập tạm chỉ được giữ trong tab trình duyệt hiện tại.</p>
+        </div>
+    </main>
+</div>
+
+<div id="app-view" class="app-view hidden">
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-brand"><span>A</span><strong>Athis Control</strong></div>
+        <nav id="main-nav" class="main-nav" aria-label="Điều hướng chính">
+            <button class="nav-item active" data-section="overview"><span>⌂</span>Tổng quan</button>
+            <button class="nav-item" data-section="accounts"><span>◎</span>Tài khoản</button>
+            <button class="nav-item" data-section="roles"><span>◇</span>Vai trò</button>
+            <button class="nav-item" data-section="permissions"><span>⌘</span>Quyền hạn</button>
+            <button class="nav-item" data-section="users"><span>♙</span>Người dùng</button>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="mini-service"><span class="status-dot online"></span> Auth :8081</div>
+            <div class="mini-service"><span class="status-dot online"></span> User :8080</div>
+        </div>
+    </aside>
+
+    <div class="workspace">
+        <header class="topbar">
+            <button id="menu-toggle" class="icon-button menu-toggle" aria-label="Mở menu">☰</button>
+            <div>
+                <p class="eyebrow">BẢNG ĐIỀU KHIỂN</p>
+                <h2 id="page-title">Tổng quan</h2>
+            </div>
+            <div class="topbar-actions">
+                <button id="refresh-page" class="icon-button" title="Tải lại dữ liệu">↻</button>
+                <div class="account-chip">
+                    <span id="account-avatar">A</span>
+                    <div><strong id="account-name">Admin</strong><small id="account-role">ADMIN</small></div>
+                </div>
+                <button id="logout-button" class="button ghost">Đăng xuất</button>
+            </div>
+        </header>
+
+        <main class="content">
+            <section id="section-overview" class="page-section active">
+                <div class="welcome-card">
+                    <div>
+                        <p class="eyebrow">HỆ THỐNG ĐANG HOẠT ĐỘNG</p>
+                        <h3 id="welcome-title">Xin chào!</h3>
+                        <p>Quản lý nhanh tài nguyên và phân quyền từ bảng điều khiển này.</p>
+                    </div>
+                    <span class="welcome-symbol">A</span>
+                </div>
+                <div id="stat-grid" class="stat-grid">
+                    <button class="stat-card" data-goto="accounts"><span class="stat-icon blue">◎</span><span><small>Tài khoản</small><strong id="stat-accounts">—</strong></span></button>
+                    <button class="stat-card" data-goto="roles"><span class="stat-icon violet">◇</span><span><small>Vai trò</small><strong id="stat-roles">—</strong></span></button>
+                    <button class="stat-card" data-goto="permissions"><span class="stat-icon amber">⌘</span><span><small>Quyền hạn</small><strong id="stat-permissions">—</strong></span></button>
+                    <button class="stat-card" data-goto="users"><span class="stat-icon green">♙</span><span><small>Người dùng</small><strong id="stat-users">—</strong></span></button>
+                </div>
+                <div class="overview-grid">
+                    <article class="panel">
+                        <div class="panel-heading"><div><p class="eyebrow">PHIÊN HIỆN TẠI</p><h3>Thông tin xác thực</h3></div><span class="pill success">Đã xác thực</span></div>
+                        <dl class="session-details">
+                            <div><dt>Tài khoản</dt><dd id="session-account">—</dd></div>
+                            <div><dt>Provider</dt><dd id="session-provider">—</dd></div>
+                            <div><dt>Vai trò</dt><dd id="session-roles">—</dd></div>
+                            <div><dt>Token hết hạn</dt><dd id="session-expiry">—</dd></div>
+                        </dl>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-heading"><div><p class="eyebrow">LỐI TẮT</p><h3>Thao tác nhanh</h3></div></div>
+                        <div class="quick-actions">
+                            <button class="quick-action" data-create="accounts"><span>＋</span>Tạo tài khoản</button>
+                            <button class="quick-action" data-create="users"><span>＋</span>Tạo người dùng</button>
+                            <button class="quick-action" data-create="roles"><span>＋</span>Tạo vai trò</button>
+                            <button class="quick-action" data-create="permissions"><span>＋</span>Tạo quyền</button>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section id="section-accounts" class="page-section resource-section" data-resource="accounts"></section>
+            <section id="section-roles" class="page-section resource-section" data-resource="roles"></section>
+            <section id="section-permissions" class="page-section resource-section" data-resource="permissions"></section>
+            <section id="section-users" class="page-section resource-section" data-resource="users"></section>
+        </main>
+    </div>
+</div>
+
+<div id="modal-backdrop" class="modal-backdrop hidden" role="presentation">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <header class="modal-header">
+            <div><p id="modal-eyebrow" class="eyebrow">THAO TÁC</p><h3 id="modal-title">Biểu mẫu</h3></div>
+            <button id="modal-close" class="icon-button" aria-label="Đóng">×</button>
+        </header>
+        <form id="modal-form">
+            <div id="modal-fields" class="modal-fields"></div>
+            <p id="modal-error" class="form-error" role="alert"></p>
+            <footer class="modal-footer">
+                <button id="modal-cancel" type="button" class="button ghost">Hủy</button>
+                <button id="modal-submit" type="submit" class="button primary">Lưu thay đổi</button>
+            </footer>
+        </form>
+    </section>
+</div>
+
+<div id="confirm-backdrop" class="modal-backdrop hidden">
+    <section class="modal confirm-modal" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title">
+        <div class="confirm-symbol">!</div>
+        <h3 id="confirm-title">Xác nhận thao tác</h3>
+        <p id="confirm-message">Bạn có chắc muốn tiếp tục?</p>
+        <div class="confirm-actions">
+            <button id="confirm-cancel" class="button ghost">Hủy</button>
+            <button id="confirm-submit" class="button danger">Xác nhận</button>
+        </div>
+    </section>
+</div>
+
+<div id="toast-region" class="toast-region" aria-live="polite"></div>
+<div id="loading-layer" class="loading-layer hidden"><span class="spinner"></span><p>Đang xử lý…</p></div>
+
+<script src="/app.js"></script>
+</body>
+</html>

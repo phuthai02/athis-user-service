@@ -8,6 +8,7 @@ import com.athis.userservice.dto.request.UserRequest;
 import com.athis.userservice.dto.response.UserResponse;
 import com.athis.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -29,8 +30,8 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ResponseApi<UserResponse> getCurrentUser(Long accountId) {
-        return ResponseApi.success(userService.getCurrentUser(accountId));
+    public ResponseApi<UserResponse> getCurrentUser(Jwt jwt) {
+        return ResponseApi.success(userService.getCurrentUser(Long.parseLong(jwt.getSubject())));
     }
 
     @Override

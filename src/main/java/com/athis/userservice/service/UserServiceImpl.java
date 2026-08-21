@@ -30,60 +30,33 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserResponse getById(Long id) {
-
-        User user = userRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found with id: " + id)
-                );
-
-        return toResponse(user);
+        return toResponse(findById(id));
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserResponse getByAccountId(Long accountId) {
-
-        User user = userRepository.findByAccountId(accountId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "User not found with accountId: " + accountId
-                        )
-                );
-
-        return toResponse(user);
+        return toResponse(findByAccountId(accountId));
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserResponse getCurrentUser(Long accountId) {
-        return getByAccountId(accountId);
+        return toResponse(findByAccountId(accountId));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<UserResponse> getAll() {
-
-        return userRepository.findAll()
-                .stream()
-                .map(this::toResponse)
-                .toList();
+        return userRepository.findAll().stream().map(this::toResponse).toList();
     }
 
     @Override
     @Transactional(readOnly = true)
     public PageResponseApi<UserResponse> getAll(PageRequestApi request) {
-
-        Pageable pageable = PageRequest.of(
-                request.getPageNo(),
-                request.getPageSize()
-        );
-
+        Pageable pageable = PageRequest.of(request.getPageNo(), request.getPageSize());
         Page<User> page = userRepository.findAll(pageable);
-
-        List<UserResponse> content = page.getContent()
-                .stream()
-                .map(this::toResponse)
-                .toList();
+        List<UserResponse> content = page.getContent().stream().map(this::toResponse).toList();
 
         return PageResponseApi.of(
                 content,
@@ -96,46 +69,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse create(UserRequest request) {
-
-        if (userRepository.existsByAccountId(request.getAccountId())) {
-            throw new ResourceAlreadyExistsException(
-                    "User already exists with accountId: "
-                            + request.getAccountId()
-            );
+        if (request.getAccountId() == null) {
+            throw new IllegalArgumentException("Account ID must not be null");
         }
+        validateAccountIdNotExists(request.getAccountId());
 
         User user = User.builder()
-                .accountId(request.getAccountId())
-                .fullName(request.getFullName())
-                .email(request.getEmail())
-                .phone(request.getPhone())
-                .avatar(request.getAvatar())
-                .dateOfBirth(request.getDateOfBirth())
-                .gender(request.getGender())
-                .address(request.getAddress())
-                .status(request.getStatus())
-                .build();
+                        .accountId(request.getAccountId())
+                        .fullName(request.getFullName())
+                        .email(request.getEmail())
+                        .phone(request.getPhone())
+                        .avatar(request.getAvatar())
+                        .dateOfBirth(request.getDateOfBirth())
+                        .gender(request.getGender())
+                        .address(request.getAddress())
+                        .status(request.getStatus())
+                        .build();
 
         User savedUser = userRepository.save(user);
-
-        log.info(
-                "Created user: id={}, accountId={}",
-                savedUser.getId(),
-                savedUser.getAccountId()
-        );
+        log.info("Created user: id={}, accountId={}", savedUser.getId(), savedUser.getAccountId());
 
         return toResponse(savedUser);
     }
 
     @Override
     public UserResponse update(Long id, UserRequest request) {
-
-        User user = userRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "User not found with id: " + id
-                        )
-                );
+        User user = findById(id);
 
         user.setFullName(request.getFullName());
         user.setEmail(request.getEmail());
@@ -149,49 +108,42 @@ public class UserServiceImpl implements UserService {
             user.setStatus(request.getStatus());
         }
 
-        User updatedUser = userRepository.save(user);
-
         log.info("Updated user: id={}", id);
-
-        return toResponse(updatedUser);
+        return toResponse(user);
     }
 
     @Override
     public void delete(Long id) {
-
-        User user = userRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "User not found with id: " + id
-                        )
-                );
-
+        User user = findById(id);
         user.setStatus(CommonStatus.DELETED);
-
-        userRepository.save(user);
-
         log.info("Deleted user: id={}", id);
     }
 
     @Override
     public void updateStatus(Long id, CommonStatus status) {
+        if (status == null) {
+            throw new IllegalArgumentException("Status must not be null");
+        }
 
-        User user = userRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "User not found with id: " + id
-                        )
-                );
-
+        User user = findById(id);
         user.setStatus(status);
+        log.info("Updated user status: id={}, status={}", id, status);
+    }
 
-        userRepository.save(user);
+    private User findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+    }
 
-        log.info(
-                "Updated user status: id={}, status={}",
-                id,
-                status
-        );
+    private User findByAccountId(Long accountId) {
+        return userRepository.findByAccountId(accountId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with accountId: " + accountId));
+    }
+
+    private void validateAccountIdNotExists(Long accountId) {
+        if (userRepository.existsByAccountId(accountId)) {
+            throw new ResourceAlreadyExistsException("User already exists with accountId: " + accountId);
+        }
     }
 
     private UserResponse toResponse(User user) {
